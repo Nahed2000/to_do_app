@@ -53,7 +53,7 @@ DateTime _selestedTime = DateTime.now();
         ),
         actions: const [
           CircleAvatar(
-            radius: 18,
+            radius: 20,
             backgroundImage: AssetImage('images/person.jpeg'),
           ),
           SizedBox(width: 6)
@@ -81,6 +81,7 @@ DateTime _selestedTime = DateTime.now();
           MyButton(
               label: '+ Add Task',
               onTap: () async {
+
                 await Get.to(const AddTaskPage());
                 _taskController.getTasks();
               })
