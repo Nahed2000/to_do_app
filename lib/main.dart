@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:to_do_app/services/theme_services.dart';
-import 'package:to_do_app/ui/pages/notification_screen.dart';
 import 'package:to_do_app/ui/theme.dart';
 
 import 'ui/pages/home_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
