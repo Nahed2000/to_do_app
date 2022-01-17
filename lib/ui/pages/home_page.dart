@@ -1,9 +1,13 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/controllers/task_controller.dart';
+import 'package:to_do_app/services/notification_services.dart';
+import 'package:to_do_app/ui/size_config.dart';
 import '../../services/theme_services.dart';
 import '../theme.dart';
 import '../widgets/button.dart';
@@ -20,8 +24,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+ late NotifyHelper notifyHelper;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    notifyHelper= NotifyHelper();
+    notifyHelper.initializeNotification();
+    notifyHelper.requestIOSPermissions();
+  }
+
   final TaskController _taskController = TaskController();
-DateTime _selestedTime = DateTime.now();
+  DateTime _selestedTime = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +49,7 @@ DateTime _selestedTime = DateTime.now();
             _addTask(),
             const SizedBox(height: 8),
             _addDateTask(),
-            //_showTaske()
+            _showTaske()
           ],
         ),
       )),
@@ -49,7 +64,11 @@ DateTime _selestedTime = DateTime.now();
           icon: Get.isDarkMode
               ? const Icon(Icons.wb_sunny_outlined)
               : const Icon(Icons.brightness_3_outlined),
-          onPressed: () => ThemeServices().switchTheme(),
+          onPressed: (){
+            ThemeServices().switchTheme();
+            NotifyHelper().displayingNotificaation(body: 'DFD', title: 'Changed Theme');
+            NotifyHelper().scheduledNotification();
+          },
         ),
         actions: const [
           CircleAvatar(
@@ -60,7 +79,9 @@ DateTime _selestedTime = DateTime.now();
         ],
       );
 
-  _showTaske() {}
+  _showTaske() {
+    return _noTask();
+  }
 
   _addTask() {
     return Container(
@@ -81,7 +102,6 @@ DateTime _selestedTime = DateTime.now();
           MyButton(
               label: '+ Add Task',
               onTap: () async {
-
                 await Get.to(const AddTaskPage());
                 _taskController.getTasks();
               })
@@ -89,13 +109,14 @@ DateTime _selestedTime = DateTime.now();
       ),
     );
   }
+
   _addDateTask() {
     return Container(
       margin: const EdgeInsets.only(top: 6, left: 20),
       child: DatePicker(
         DateTime.now(),
         initialSelectedDate: _selestedTime,
-        onDateChange: (newDate){
+        onDateChange: (newDate) {
           setState(() {
             _selestedTime = newDate;
           });
@@ -106,27 +127,57 @@ DateTime _selestedTime = DateTime.now();
         selectedTextColor: Colors.white,
         dateTextStyle: GoogleFonts.lato(
             textStyle: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey
-            )
-        ),
+                fontSize: 20, fontWeight: FontWeight.w600, color: Colors.grey)),
         dayTextStyle: GoogleFonts.lato(
             textStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey
-            )
-        ),monthTextStyle: GoogleFonts.lato(
+                fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey)),
+        monthTextStyle: GoogleFonts.lato(
             textStyle: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey
-            )
-        ),
+                fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey)),
       ),
     );
   }
+
+  _noTask() {
+    SizeConfig.orientation = Orientation.portrait;
+    return Stack(
+      children: [
+        AnimatedPositioned(
+            child: SingleChildScrollView(
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.center,
+                direction: SizeConfig.orientation == Orientation.landscape
+                    ? Axis.horizontal
+                    : Axis.vertical,
+                children: [
+                  SizeConfig.orientation == Orientation.landscape
+                      ? const SizedBox(height: 6)
+                      : const SizedBox(height: 220),
+                  SvgPicture.asset(
+                    'images/task.svg',
+                    semanticsLabel: 'Task',
+                    height: 90,
+                    color: primaryClr.withOpacity(0.5),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10),
+                    child: Text(
+                      "Don't have any Task\nAdd new Task to make your Day productive",
+                      style: subTitle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),SizeConfig.orientation == Orientation.landscape
+                      ? const SizedBox(height: 180)
+                      : const SizedBox(height: 160),
+                ],
+              ),
+            ),
+            duration: const Duration(
+              milliseconds: 2000,
+            ))
+      ],
+    );
+  }
 }
-
-
