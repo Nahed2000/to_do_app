@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
       note: 'DescRpet',
       isCompleted: 1,
       startTime: '20:10',
-      endTime: '20 : 15',
+      endTime: '20:15',
       color: 2,
     )));
   }
