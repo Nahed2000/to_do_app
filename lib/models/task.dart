@@ -10,7 +10,7 @@ class Task {
   int? remind;
   String? repeat;
 
-  Task(
+  Task({
     this.id,
     this.title,
     this.note,
@@ -21,5 +21,5 @@ class Task {
     this.color,
     this.remind,
     this.repeat,
-  );
+  });
 }
