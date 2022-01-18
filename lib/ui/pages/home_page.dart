@@ -47,20 +47,19 @@ class _HomePageState extends State<HomePage> {
       appBar: _appBar(),
       body: Container(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _addTask(),
-                const SizedBox(height: 8),
-                _addDateTask(),
-                _showTaske()
-              ],
-            ),
-          )),
+        child: Column(
+          children: [
+            _addTask(),
+            const SizedBox(height: 8),
+            _addDateTask(),
+            _showTaske()
+          ],
+        ),
+      )),
     );
   }
 
-  AppBar _appBar() =>
-      AppBar(
+  AppBar _appBar() => AppBar(
         elevation: 0,
         backgroundColor: context.theme.backgroundColor,
         leading: IconButton(
@@ -70,8 +69,8 @@ class _HomePageState extends State<HomePage> {
               : const Icon(Icons.brightness_3_outlined),
           onPressed: () {
             ThemeServices().switchTheme();
-            NotifyHelper().displayingNotificaation(
-                body: 'DFD', title: 'Changed Theme');
+            NotifyHelper()
+                .displayingNotificaation(body: 'DFD', title: 'Changed Theme');
             NotifyHelper().scheduledNotification();
           },
         ),
@@ -85,15 +84,14 @@ class _HomePageState extends State<HomePage> {
       );
 
   _showTaske() {
-    return Expanded(child: TaskTile(Task(
+    return Expanded(
+        child: TaskTile(Task(
       title: 'Title 1',
-      note : 'DescRpet',
+      note: 'DescRpet',
       isCompleted: 1,
-
       startTime: '20:10',
       endTime: '20 : 15',
       color: 2,
-
     )));
   }
 
@@ -182,7 +180,8 @@ class _HomePageState extends State<HomePage> {
                       style: subTitle,
                       textAlign: TextAlign.center,
                     ),
-                  ), SizeConfig.orientation == Orientation.landscape
+                  ),
+                  SizeConfig.orientation == Orientation.landscape
                       ? const SizedBox(height: 180)
                       : const SizedBox(height: 160),
                 ],
