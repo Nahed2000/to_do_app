@@ -6,10 +6,15 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/controllers/task_controller.dart';
+<<<<<<< HEAD
 import 'package:to_do_app/models/task.dart';
 import 'package:to_do_app/services/notification_services.dart';
 import 'package:to_do_app/ui/size_config.dart';
 import 'package:to_do_app/ui/widgets/task_tile.dart';
+=======
+import 'package:to_do_app/services/notification_services.dart';
+import 'package:to_do_app/ui/size_config.dart';
+>>>>>>> 3ac0c02c076cc5df566d79b32213f1c3a721cd50
 import '../../services/theme_services.dart';
 import '../theme.dart';
 import '../widgets/button.dart';
@@ -26,13 +31,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+<<<<<<< HEAD
   late NotifyHelper notifyHelper;
 
+=======
+ late NotifyHelper notifyHelper;
+>>>>>>> 3ac0c02c076cc5df566d79b32213f1c3a721cd50
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+<<<<<<< HEAD
     notifyHelper = NotifyHelper();
+=======
+    notifyHelper= NotifyHelper();
+>>>>>>> 3ac0c02c076cc5df566d79b32213f1c3a721cd50
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
   }
@@ -67,10 +80,16 @@ class _HomePageState extends State<HomePage> {
           icon: Get.isDarkMode
               ? const Icon(Icons.wb_sunny_outlined)
               : const Icon(Icons.brightness_3_outlined),
+<<<<<<< HEAD
           onPressed: () {
             ThemeServices().switchTheme();
             NotifyHelper()
                 .displayingNotificaation(body: 'DFD', title: 'Changed Theme');
+=======
+          onPressed: (){
+            ThemeServices().switchTheme();
+            NotifyHelper().displayingNotificaation(body: 'DFD', title: 'Changed Theme');
+>>>>>>> 3ac0c02c076cc5df566d79b32213f1c3a721cd50
             NotifyHelper().scheduledNotification();
           },
         ),
@@ -84,6 +103,7 @@ class _HomePageState extends State<HomePage> {
       );
 
   _showTaske() {
+<<<<<<< HEAD
     return Expanded(
         child: TaskTile(Task(
       title: 'Title 1',
@@ -93,6 +113,9 @@ class _HomePageState extends State<HomePage> {
       endTime: '20:15',
       color: 2,
     )));
+=======
+    return _noTask();
+>>>>>>> 3ac0c02c076cc5df566d79b32213f1c3a721cd50
   }
 
   _addTask() {
@@ -180,8 +203,12 @@ class _HomePageState extends State<HomePage> {
                       style: subTitle,
                       textAlign: TextAlign.center,
                     ),
+<<<<<<< HEAD
                   ),
                   SizeConfig.orientation == Orientation.landscape
+=======
+                  ),SizeConfig.orientation == Orientation.landscape
+>>>>>>> 3ac0c02c076cc5df566d79b32213f1c3a721cd50
                       ? const SizedBox(height: 180)
                       : const SizedBox(height: 160),
                 ],
