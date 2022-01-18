@@ -6,10 +6,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/controllers/task_controller.dart';
-import 'package:to_do_app/models/task.dart';
 import 'package:to_do_app/services/notification_services.dart';
 import 'package:to_do_app/ui/size_config.dart';
-import 'package:to_do_app/ui/widgets/task_tile.dart';
 import '../../services/theme_services.dart';
 import '../theme.dart';
 import '../widgets/button.dart';
@@ -26,13 +24,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late NotifyHelper notifyHelper;
-
+ late NotifyHelper notifyHelper;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    notifyHelper = NotifyHelper();
+    notifyHelper= NotifyHelper();
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
   }
@@ -67,10 +64,9 @@ class _HomePageState extends State<HomePage> {
           icon: Get.isDarkMode
               ? const Icon(Icons.wb_sunny_outlined)
               : const Icon(Icons.brightness_3_outlined),
-          onPressed: () {
+          onPressed: (){
             ThemeServices().switchTheme();
-            NotifyHelper()
-                .displayingNotificaation(body: 'DFD', title: 'Changed Theme');
+            NotifyHelper().displayingNotificaation(body: 'DFD', title: 'Changed Theme');
             NotifyHelper().scheduledNotification();
           },
         ),
@@ -84,15 +80,7 @@ class _HomePageState extends State<HomePage> {
       );
 
   _showTaske() {
-    return Expanded(
-        child: TaskTile(Task(
-      title: 'Title 1',
-      note: 'Description Repeat',
-      isCompleted: 1,
-      startTime: '20:10',
-      endTime: '20:15',
-      color: 2,
-    )));
+    return _noTask();
   }
 
   _addTask() {
@@ -180,8 +168,7 @@ class _HomePageState extends State<HomePage> {
                       style: subTitle,
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                  SizeConfig.orientation == Orientation.landscape
+                  ),SizeConfig.orientation == Orientation.landscape
                       ? const SizedBox(height: 180)
                       : const SizedBox(height: 160),
                 ],

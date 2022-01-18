@@ -6,12 +6,14 @@ import 'package:to_do_app/ui/size_config.dart';
 import '../theme.dart';
 
 class TaskTile extends StatelessWidget {
-  
-
   const TaskTile(this.task, {Key? key}) : super(key: key);
- final Task task;
+  final Task task;
+
   @override
   Widget build(BuildContext context) {
+    MediaQueryData _mediaQueryData = MediaQuery.of(context);
+    SizeConfig.screenWidth = _mediaQueryData.size.width;
+    SizeConfig.orientation = Orientation.portrait;
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: getProportionateScreenWidth(
@@ -45,7 +47,7 @@ class TaskTile extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                         Icon(
+                        Icon(
                           Icons.access_time,
                           size: 18,
                           color: Colors.grey[200],
@@ -54,7 +56,7 @@ class TaskTile extends StatelessWidget {
                         Text(
                           '${task.startTime} - ${task.endTime}',
                           style: GoogleFonts.lato(
-                            textStyle:  TextStyle(
+                            textStyle: TextStyle(
                                 fontSize: 12, color: Colors.grey[200]),
                           ),
                         ),
@@ -64,9 +66,8 @@ class TaskTile extends StatelessWidget {
                     Text(
                       '${task.note}',
                       style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white),
+                        textStyle:
+                            const TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     )
                   ],
