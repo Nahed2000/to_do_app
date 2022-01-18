@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
         child: TaskTile(Task(
       title: 'Title 1',
-      note: 'DescRpet',
+      note: 'Description Repeat',
       isCompleted: 1,
       startTime: '20:10',
       endTime: '20:15',
