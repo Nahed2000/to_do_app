@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/controllers/task_controller.dart';
+import 'package:to_do_app/models/task.dart';
 import 'package:to_do_app/services/notification_services.dart';
 import 'package:to_do_app/ui/size_config.dart';
+import 'package:to_do_app/ui/widgets/task_tile.dart';
 import '../../services/theme_services.dart';
 import '../theme.dart';
 import '../widgets/button.dart';
@@ -24,12 +26,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
- late NotifyHelper notifyHelper;
+  late NotifyHelper notifyHelper;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    notifyHelper= NotifyHelper();
+    notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
   }
@@ -39,7 +42,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+
+
+return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: _appBar(),
       body: Container(
@@ -64,9 +70,10 @@ class _HomePageState extends State<HomePage> {
           icon: Get.isDarkMode
               ? const Icon(Icons.wb_sunny_outlined)
               : const Icon(Icons.brightness_3_outlined),
-          onPressed: (){
+          onPressed: () {
             ThemeServices().switchTheme();
-            NotifyHelper().displayingNotificaation(body: 'DFD', title: 'Changed Theme');
+            NotifyHelper()
+                .displayingNotificaation(body: 'DFD', title: 'Changed Theme');
             NotifyHelper().scheduledNotification();
           },
         ),
@@ -80,7 +87,29 @@ class _HomePageState extends State<HomePage> {
       );
 
   _showTaske() {
-    return _noTask();
+    return Expanded(
+        child: GestureDetector(
+      onTap: () {
+        showbottomsheet(
+            context,
+            Task(
+                title: 'Title',
+                note: 'Nothing ',
+                isCompleted: 0,
+                color: 1,
+                startTime: '2:01',
+                endTime: '2.02'));
+      },
+          child: TaskTile(
+              Task(
+                  title: 'Title',
+                  note: 'Nothing ',
+                  isCompleted: 0,
+                  color: 1,
+                  startTime: '2:01',
+                  endTime: '2.02')),
+          ),
+    );
   }
 
   _addTask() {
@@ -168,7 +197,8 @@ class _HomePageState extends State<HomePage> {
                       style: subTitle,
                       textAlign: TextAlign.center,
                     ),
-                  ),SizeConfig.orientation == Orientation.landscape
+                  ),
+                  SizeConfig.orientation == Orientation.landscape
                       ? const SizedBox(height: 180)
                       : const SizedBox(height: 160),
                 ],
@@ -178,6 +208,90 @@ class _HomePageState extends State<HomePage> {
               milliseconds: 2000,
             ))
       ],
+    );
+  }
+
+  showbottomsheet(BuildContext context, Task task) {
+    Get.bottomSheet(
+      SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.only(top: 4),
+          width: SizeConfig.screenWidth,
+          height: (SizeConfig.orientation == Orientation.landscape)
+              ? (task.isCompleted == 1
+                  ? SizeConfig.screenHeight * 0.6
+                  : SizeConfig.screenHeight * 0.8)
+              : (task.isCompleted == 1
+                  ? SizeConfig.screenHeight * 0.30
+                  : SizeConfig.screenHeight * 0.39),
+          color: Get.isDarkMode ? darkHeaderClr : Colors.white,
+          child: Column(
+            children: [
+              Flexible(
+                child: Container(
+                  height: 6,
+                  width: 120,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color:
+                          Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]),
+                ),
+              ),
+              const SizedBox(height: 20),
+              task.isCompleted == 1
+                  ? Container()
+                  : _buildbottomsheet(
+                      label: 'Competed Task', Clr: primaryClr, onTap: () {}),
+              _buildbottomsheet(
+                  label: 'Deleted Task',
+                  Clr: primaryClr,
+                  onTap: () {
+                    Get.back();
+                  }),
+              Divider(
+                color: Get.isDarkMode ? Colors.grey : darkGreyClr,
+              ),
+              _buildbottomsheet(
+                  label: 'Cancel',
+                  Clr: primaryClr,
+                  onTap: () {
+                    Get.back();
+                  }),
+              const SizedBox(height: 20)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildbottomsheet(
+      {required String label,
+      required GestureTapCallback onTap,
+      required Color Clr,
+      bool isClose = false}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 65,
+        width: SizeConfig.screenWidth * 0.9,
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+            border: Border.all(
+                width: 2,
+                color: isClose
+                    ? Get.isDarkMode
+                        ? Colors.grey[600]!
+                        : Colors.grey[200]!
+                    : Clr),
+            borderRadius: BorderRadius.circular(20),
+            color: isClose ? Colors.transparent : Clr),
+        child: Text(
+          label,
+          style:
+              isClose ? TitleStyle : TitleStyle.copyWith(color: Colors.white),
+        ),
+      ),
     );
   }
 }
