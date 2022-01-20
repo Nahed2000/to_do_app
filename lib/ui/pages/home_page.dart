@@ -42,23 +42,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-return Scaffold(
+    return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: _appBar(),
-      body: Container(
-          child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _addTask(),
-            const SizedBox(height: 8),
-            _addDateTask(),
-            _showTaske()
-          ],
-        ),
-      )),
+      body: Column(
+        children: [_addTask(), _addDateTask(), _showTaske()],
+      ),
     );
   }
 
@@ -88,27 +77,31 @@ return Scaffold(
 
   _showTaske() {
     return Expanded(
-        child: GestureDetector(
-      onTap: () {
-        showbottomsheet(
-            context,
-            Task(
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              showbottomsheet(
+                  context,
+                  Task(
+                      title: 'Title',
+                      note: 'Nothing ',
+                      isCompleted: 0,
+                      color: 1,
+                      startTime: '2:01',
+                      endTime: '2.02'));
+            },
+            child: TaskTile(Task(
                 title: 'Title',
                 note: 'Nothing ',
                 isCompleted: 0,
                 color: 1,
                 startTime: '2:01',
-                endTime: '2.02'));
-      },
-          child: TaskTile(
-              Task(
-                  title: 'Title',
-                  note: 'Nothing ',
-                  isCompleted: 0,
-                  color: 1,
-                  startTime: '2:01',
-                  endTime: '2.02')),
-          ),
+                endTime: '2.02')),
+          );
+        },
+        itemCount: 3,
+      ),
     );
   }
 
@@ -267,7 +260,7 @@ return Scaffold(
 
   _buildbottomsheet(
       {required String label,
-      required GestureTapCallback onTap,
+      required Function() onTap,
       required Color Clr,
       bool isClose = false}) {
     return GestureDetector(
