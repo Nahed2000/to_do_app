@@ -246,6 +246,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _addTaskToDb() async {
     _taskController.addTask(Task(
+
+
       title: _titlecontroller.text,
       note: _notecontroller.text,
       color: _selectedColore,
