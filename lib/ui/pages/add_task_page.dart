@@ -282,6 +282,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           ? TimeOfDay.fromDateTime(DateTime.now())
           : TimeOfDay.fromDateTime(
               DateTime.now().add(
+
                 const Duration(minutes: 15),
               ),
             ),
