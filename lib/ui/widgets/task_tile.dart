@@ -11,9 +11,6 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData _mediaQueryData = MediaQuery.of(context);
-    SizeConfig.screenWidth = _mediaQueryData.size.width;
-    SizeConfig.orientation = Orientation.portrait;
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: getProportionateScreenWidth(
@@ -57,7 +54,7 @@ class TaskTile extends StatelessWidget {
                           '${task.startTime} - ${task.endTime}',
                           style: GoogleFonts.lato(
                             textStyle: TextStyle(
-                                fontSize: 12, color: Colors.grey[200]),
+                                fontSize: 13, color: Colors.grey[200]),
                           ),
                         ),
                       ],
@@ -67,7 +64,7 @@ class TaskTile extends StatelessWidget {
                       '${task.note}',
                       style: GoogleFonts.lato(
                         textStyle:
-                            const TextStyle(fontSize: 14, color: Colors.white),
+                            const TextStyle(fontSize: 15, color: Colors.white),
                       ),
                     )
                   ],
@@ -104,7 +101,7 @@ class TaskTile extends StatelessWidget {
         return bluishClr;
       case 1:
         return orangeClr;
-      case 3:
+      case 2:
         return pinkClr;
       default:
         return bluishClr;

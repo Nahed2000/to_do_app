@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/controllers/task_controller.dart';
+import 'package:to_do_app/models/task.dart';
 import 'package:to_do_app/ui/widgets/button.dart';
 import 'package:to_do_app/ui/widgets/input_field.dart';
 
@@ -62,7 +63,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       Icons.calendar_today_outlined,
                       color: Colors.grey,
                     ),
-                    onPressed: () {},
+                    onPressed: () => _getDate(),
                   ),
                 ),
                 Row(
@@ -72,7 +73,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       title: 'Start Time',
                       hint: startTime,
                       widget: IconButton(
-                        onPressed: () {},
+                        onPressed: () => _getTime(isStart: true),
                         icon: const Icon(Icons.access_time, color: Colors.grey),
                       ),
                     )),
@@ -82,7 +83,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       title: 'End Time',
                       hint: endTime,
                       widget: IconButton(
-                        onPressed: () {},
+                        onPressed: () => _getTime(isStart: false),
                         icon: const Icon(
                           Icons.access_time,
                           color: Colors.grey,
@@ -150,13 +151,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 18),
+                const SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Column_methode(),
-                    MyButton(label: 'Add Task', onTap: () {}),
+                    MyButton(
+                        label: 'Create Task',
+                        onTap: () {
+                          validateTask();
+                        }),
                   ],
                 )
               ],
@@ -219,5 +224,79 @@ class _AddTaskPageState extends State<AddTaskPage> {
         )
       ],
     );
+  }
+
+  validateTask() async {
+    if (_titlecontroller.text.isNotEmpty && _notecontroller.text.isNotEmpty) {
+      _addTaskToDb();
+      Get.back();
+    } else if (_titlecontroller.text.isEmpty || _notecontroller.text.isEmpty) {
+      Get.snackbar('required ', 'All filed require ',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.white,
+          colorText: pinkClr,
+          icon: const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.red,
+          ));
+    } else {
+      print('nothing');
+    }
+  }
+
+  _addTaskToDb() async {
+    _taskController.addTask(Task(
+      title: _titlecontroller.text,
+      note: _notecontroller.text,
+      color: _selectedColore,
+      isCompleted: 0,
+      startTime: startTime,
+      endTime: endTime,
+      date: DateFormat.yMd().format(_selectedTime),
+      remind: _selecRemind,
+      repeat: _selectRepeat,
+    ));
+  }
+
+  _getDate() async {
+    DateTime? _picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedTime,
+      firstDate: DateTime(2010),
+      lastDate: DateTime(2100),
+    );
+    if (_picked != null) {
+      setState(() {
+        _selectedTime = _picked;
+      });
+    } else {
+      print('Nothing');
+    }
+  }
+
+  _getTime({required bool isStart}) async {
+    TimeOfDay? _pickedTime = await showTimePicker(
+      context: context,
+      initialEntryMode: TimePickerEntryMode.input,
+      initialTime: isStart
+          ? TimeOfDay.fromDateTime(DateTime.now())
+          : TimeOfDay.fromDateTime(
+              DateTime.now().add(
+                const Duration(minutes: 15),
+              ),
+            ),
+    );
+    String _formatDate = _pickedTime!.format(context);
+    if (isStart) {
+      setState(() {
+        startTime = _formatDate;
+      });
+    } else if (!isStart) {
+      setState(() {
+        endTime = _formatDate;
+      });
+    } else {
+      print('Nothing');
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,6 +28,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
+  SizeConfig sizee = SizeConfig();
 
   @override
   void initState() {
@@ -42,11 +44,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    sizee.init(context);
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: _appBar(),
       body: Column(
-        children: [_addTask(), _addDateTask(), _showTaske()],
+        children: [
+          _addTask(),
+          _addDateTask(),
+          _showTask(),
+        ],
       ),
     );
   }
@@ -61,9 +68,6 @@ class _HomePageState extends State<HomePage> {
               : const Icon(Icons.brightness_3_outlined),
           onPressed: () {
             ThemeServices().switchTheme();
-            NotifyHelper()
-                .displayingNotificaation(body: 'DFD', title: 'Changed Theme');
-            NotifyHelper().scheduledNotification();
           },
         ),
         actions: const [
@@ -75,32 +79,42 @@ class _HomePageState extends State<HomePage> {
         ],
       );
 
-  _showTaske() {
+  _showTask() {
     return Expanded(
       child: ListView.builder(
+        scrollDirection: SizeConfig.orientation == Orientation.landscape
+            ? Axis.horizontal
+            : Axis.vertical,
+        itemCount: _taskController.listTask.length,
         itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              showbottomsheet(
-                  context,
-                  Task(
-                      title: 'Title',
-                      note: 'Nothing ',
-                      isCompleted: 0,
-                      color: 1,
-                      startTime: '2:01',
-                      endTime: '2.02'));
-            },
-            child: TaskTile(Task(
-                title: 'Title',
-                note: 'Nothing ',
-                isCompleted: 0,
-                color: 1,
-                startTime: '2:01',
-                endTime: '2.02')),
+          var task = _taskController.listTask[index];
+          var hour = task.startTime.toString().split(':')[0];
+          var minute = task.startTime.toString().split(':')[1];
+          var date = DateFormat.jm().parse(task.startTime!);
+          var myTime= DateFormat('HH:mm').format(date);
+          NotifyHelper().scheduledNotification(
+            int.parse(myTime.toString().split(':')[0]),
+            int.parse(myTime.toString().split(':')[1]),
+            task,
+          );
+
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 1500),
+            child: SlideAnimation(
+              horizontalOffset: 300,
+              child: FadeInAnimation(
+                child: GestureDetector(
+                  onTap: () {
+                    print('ok');
+                    showbottomsheet(context, task);
+                  },
+                  child: TaskTile(task),
+                ),
+              ),
+            ),
           );
         },
-        itemCount: 3,
       ),
     );
   }
@@ -161,7 +175,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _noTask() {
-    SizeConfig.orientation = Orientation.portrait;
     return Stack(
       children: [
         AnimatedPositioned(
@@ -230,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                           Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               task.isCompleted == 1
                   ? Container()
                   : _buildbottomsheet(
@@ -250,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Get.back();
                   }),
-              const SizedBox(height: 20)
+              const SizedBox(height: 10)
             ],
           ),
         ),
@@ -279,10 +292,12 @@ class _HomePageState extends State<HomePage> {
                     : Clr),
             borderRadius: BorderRadius.circular(20),
             color: isClose ? Colors.transparent : Clr),
-        child: Text(
-          label,
-          style:
-              isClose ? TitleStyle : TitleStyle.copyWith(color: Colors.white),
+        child: Center(
+          child: Text(
+            label,
+            style:
+                isClose ? TitleStyle : TitleStyle.copyWith(color: Colors.white),
+          ),
         ),
       ),
     );

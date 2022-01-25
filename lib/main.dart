@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:to_do_app/services/theme_services.dart';
 import 'package:to_do_app/ui/theme.dart';
 
+import 'db/db_helper.dart';
 import 'ui/pages/home_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DBHelper.initDB();
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -21,7 +25,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeServices().theme,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-        home: const HomePage(),
+      home: const HomePage(),
     );
   }
 }
