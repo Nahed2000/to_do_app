@@ -20,7 +20,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _titlecontroller = TextEditingController();
   final TextEditingController _notecontroller = TextEditingController();
   DateTime _selectedTime = DateTime.now();
-  String startTime = DateFormat('hh:mm  a').format(DateTime.now()).toString();
+  String startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
   String endTime = DateFormat('hh:mm a')
       .format(DateTime.now().add(const Duration(minutes: 15)))
       .toString();
@@ -246,7 +246,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _addTaskToDb() async {
     try{
-      int value =await _taskController.addTask(Task(
+      int value =await _taskController.addTask(task: Task(
         title: _titlecontroller.text,
         note: _notecontroller.text,
         color: _selectedColore,
@@ -257,21 +257,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
         remind: _selecRemind,
         repeat: _selectRepeat,
       ));
+      print('$value');
     }catch(e){
       print(e);
     }
   }
 
   _getDate() async {
-    DateTime? _picked = await showDatePicker(
+    DateTime? _pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedTime,
       firstDate: DateTime(2010),
-      lastDate: DateTime(2100),
+      lastDate: DateTime(2040),
     );
-    if (_picked != null) {
+    if (_pickedDate != null) {
       setState(() {
-        _selectedTime = _picked;
+        _selectedTime = _pickedDate;
       });
     } else {
       print('Nothing');

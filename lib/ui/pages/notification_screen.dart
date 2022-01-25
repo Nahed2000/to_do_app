@@ -35,7 +35,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Get.isDarkMode ? Colors.white : darkGreyClr,
+          ),
           onPressed: () => Get.back(),
         ),
       ),
@@ -73,7 +76,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row_Notifcaton('Title',Icons.text_format),
+                      Row_Notifcaton('Title', Icons.text_format),
                       const SizedBox(height: 20),
                       Text(
                         _pyload.toString().split('|')[0],
@@ -82,7 +85,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Row_Notifcaton('Description',Icons.description),
+                      Row_Notifcaton('Description', Icons.description),
                       const SizedBox(height: 20),
                       Text(
                         _pyload.toString().split('|')[1],
@@ -94,7 +97,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       Row_Notifcaton('Time', Icons.calendar_today_sharp),
                       const SizedBox(height: 20),
                       Text(
-                        _pyload.toString().split('|')[0],
+                        _pyload.toString().split('|')[2],
                         style: const TextStyle(
                           color: Colors.white,
                         ),

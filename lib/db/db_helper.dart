@@ -18,7 +18,7 @@ class DBHelper {
         _db = await openDatabase(_path, version: _version,
             onCreate: (Database db, int version) async {
           // When creating the db, create the table
-          await db.execute(
+          return db.execute(
             'CREATE TABLE $_tableName ('
             'id INTEGER PRIMARY KEY AUTOINCREMENT, '
             'title STRING, '
@@ -32,15 +32,22 @@ class DBHelper {
             'repeat STRING)',
           );
         });
+        print('CREATE DATABASE ');
       } catch (e) {
         print(e);
       }
     }
   }
 
-  static Future<int> insert(Task task) async {
-    print('insert function code');
-    return await _db!.insert(_tableName, task.toJson());
+  static Future<int> insert(Task? task) async {
+    try{
+      print('insert function code');
+      return await _db!.insert(_tableName, task!.toJson());
+    }catch(e){
+      print(e);
+      return 90000;
+    }
+
   }
 
   static Future<int> delete(Task task) async {
@@ -55,10 +62,8 @@ class DBHelper {
 
   static Future<int> update(int id) async {
     print('update function code ');
-    return await _db!.rawUpdate('''
-     UPDATE tasks
-     SET isComplete = ?
-     WHERE id =?
-    ''', [1, id]);
+    return await _db!.rawUpdate(
+        'UPDATE tasks SET isComplete = ? WHERE id = ?'
+    , [1, '$id']);
   }
 }

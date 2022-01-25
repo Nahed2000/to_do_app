@@ -3,9 +3,10 @@ import 'package:to_do_app/db/db_helper.dart';
 import 'package:to_do_app/models/task.dart';
 
 class TaskController extends GetxController {
+
   final RxList<Task> listTask = <Task>[].obs;
 
-  Future<int> addTask(Task? task) async {
+  Future<int> addTask({Task? task}) async {
     return DBHelper.insert(task!);
   }
 
