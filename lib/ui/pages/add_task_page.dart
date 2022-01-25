@@ -245,19 +245,21 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   _addTaskToDb() async {
-    _taskController.addTask(Task(
-
-
-      title: _titlecontroller.text,
-      note: _notecontroller.text,
-      color: _selectedColore,
-      isCompleted: 0,
-      startTime: startTime,
-      endTime: endTime,
-      date: DateFormat.yMd().format(_selectedTime),
-      remind: _selecRemind,
-      repeat: _selectRepeat,
-    ));
+    try{
+      int value =await _taskController.addTask(Task(
+        title: _titlecontroller.text,
+        note: _notecontroller.text,
+        color: _selectedColore,
+        isCompleted: 0,
+        startTime: startTime,
+        endTime: endTime,
+        date: DateFormat.yMd().format(_selectedTime),
+        remind: _selecRemind,
+        repeat: _selectRepeat,
+      ));
+    }catch(e){
+      print(e);
+    }
   }
 
   _getDate() async {

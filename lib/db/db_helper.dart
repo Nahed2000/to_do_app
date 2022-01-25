@@ -21,11 +21,15 @@ class DBHelper {
           await db.execute(
             'CREATE TABLE $_tableName ('
             'id INTEGER PRIMARY KEY AUTOINCREMENT, '
-            'title STRING, note TEXT, date STRING'
-            'startTime STRING, endTime STRING, '
-            'remind INTEGER, repeat STRING, '
+            'title STRING, '
+            'note TEXT, '
+            'isCompleted INTEGER, '
             'color INTEGER, '
-            'isCompleted INTEGER)',
+            'startTime STRING, '
+            'endTime STRING, '
+            'date INTEGER, '
+            'remind INTEGER, '
+            'repeat STRING)',
           );
         });
       } catch (e) {
@@ -38,7 +42,6 @@ class DBHelper {
     print('insert function code');
     return await _db!.insert(_tableName, task.toJson());
   }
-
 
   static Future<int> delete(Task task) async {
     print('delete function code');
@@ -58,5 +61,4 @@ class DBHelper {
      WHERE id =?
     ''', [1, id]);
   }
-
 }
