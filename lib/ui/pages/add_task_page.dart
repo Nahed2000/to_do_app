@@ -293,6 +293,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
         startTime = _formatDate;
       });
     } else if (!isStart) {
+
+
       setState(() {
         endTime = _formatDate;
       });
