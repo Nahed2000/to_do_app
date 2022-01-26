@@ -3,7 +3,6 @@ import 'package:to_do_app/db/db_helper.dart';
 import 'package:to_do_app/models/task.dart';
 
 class TaskController extends GetxController {
-
   final RxList<Task> listTask = <Task>[].obs;
 
   Future<int> addTask({Task? task}) async {
@@ -17,6 +16,11 @@ class TaskController extends GetxController {
 
   void delete(Task task) async {
     await DBHelper.delete(task);
+    getTasks();
+  }
+
+  void deleteAllTask() async {
+    await DBHelper.deleteAllTask();
     getTasks();
   }
 

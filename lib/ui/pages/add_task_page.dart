@@ -194,6 +194,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   Column Column_methode() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Color'),
         Wrap(

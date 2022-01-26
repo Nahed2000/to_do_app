@@ -16,6 +16,7 @@ import '../theme.dart';
 import '../widgets/button.dart';
 import 'add_task_page.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -39,7 +40,6 @@ class _HomePageState extends State<HomePage> {
 
   final TaskController _taskController = TaskController();
   DateTime _selestedTime = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     sizee.init(context);
@@ -63,17 +63,26 @@ class _HomePageState extends State<HomePage> {
           color: Get.isDarkMode ? Colors.white : Colors.black,
           icon: Get.isDarkMode
               ? const Icon(Icons.wb_sunny_outlined)
-              : const Icon(Icons.brightness_3_outlined),
+              : const Icon(Icons.brightness_3_outlined,size: 24,),
           onPressed: () {
             ThemeServices().switchTheme();
           },
         ),
-        actions: const [
-          CircleAvatar(
+        actions:  [
+          IconButton(
+
+            color: Get.isDarkMode ? Colors.white : Colors.black,
+            icon:const Icon(Icons.cleaning_services_outlined,size: 24,),
+            onPressed: () {
+              notifyHelper.flutterLocalNotificationsPlugin.cancelAll();
+              _taskController.deleteAllTask();
+            },
+          ),
+          const CircleAvatar(
             radius: 20,
             backgroundImage: AssetImage('images/person.jpeg'),
           ),
-          SizedBox(width: 6)
+          const SizedBox(width: 20)
         ],
       );
 
@@ -93,32 +102,47 @@ class _HomePageState extends State<HomePage> {
                 itemCount: _taskController.listTask.length,
                 itemBuilder: (BuildContext context, int index) {
                   var task = _taskController.listTask[index];
-                  var hour = task.startTime.toString().split(':')[0];
-                  var minute = task.startTime.toString().split(':')[1];
-                  var date = DateFormat.jm().parse(task.startTime!);
-                  var myTime = DateFormat('HH:mm').format(date);
-                  NotifyHelper().scheduledNotification(
-                    int.parse(myTime.toString().split(':')[0]),
-                    int.parse(myTime.toString().split(':')[1]),
-                    task,
-                  );
 
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 1500),
-                    child: SlideAnimation(
-                      horizontalOffset: 300,
-                      child: FadeInAnimation(
-                        child: GestureDetector(
-                          onTap: () {
-                            print('ok');
-                            showbottomsheet(context, task);
-                          },
-                          child: TaskTile(task),
+                  if (task.repeat == 'Delay' ||
+                      task.date == DateFormat.yMd().format(_selestedTime)||
+                      (task.repeat=='Weekly'&&_selestedTime.difference(DateFormat.yMd().parse(task.date!)).inDays%7 ==0)
+                      ||(task.repeat=='Monthly'&&  DateFormat.yMd().parse(task.date!).day==_selestedTime.day)
+
+
+                  ) {
+                    
+                    // var hour = task.startTime.toString().split(':')[0];
+                    // var minute = task.startTime.toString().split(':')[1];
+                    // print('hour : $hour');
+                    // print('minute :  $minute');
+                    
+                    var date = DateFormat.jm().parse(task.startTime!);
+                    var myTime = DateFormat('HH:mm').format(date);
+                    NotifyHelper().scheduledNotification(
+                      int.parse(myTime.toString().split(':')[0]),
+                      int.parse(myTime.toString().split(':')[1]),
+                      task,
+                    );
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 1500),
+                      child: SlideAnimation(
+                        horizontalOffset: 300,
+                        child: FadeInAnimation(
+                          child: GestureDetector(
+                            onTap: () {
+                              print('ok');
+                              showbottomsheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          ),
                         ),
                       ),
-                    ),
-                  );
+                    );
+                  }else{
+                    return Container();
+                  }
+
                 },
               ),
             );
@@ -259,15 +283,21 @@ class _HomePageState extends State<HomePage> {
               task.isCompleted == 1
                   ? Container()
                   : _buildbottomsheet(
-                      label: 'Competed Task', Clr: primaryClr, onTap: () {
+                      label: 'Competed Task',
+                      Clr: primaryClr,
+                      onTap: () async{
                         _taskController.markTaskCompleted(task.id!);
+                        await notifyHelper.flutterLocalNotificationsPlugin.cancel(task.id!);
                         Get.back();
-              }),
+                      }),
               _buildbottomsheet(
                   label: 'Deleted Task',
-                  Clr: primaryClr,
-                  onTap: () {
+                  Clr: Colors.red[300]!,
+                  onTap: () async {
                     _taskController.delete(task);
+                    await notifyHelper.flutterLocalNotificationsPlugin.cancel(task.id!);
+                    print('Notification Deleted');
+
                     Get.back();
                   }),
               Divider(
