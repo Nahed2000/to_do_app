@@ -109,7 +109,13 @@ class NotifyHelper {
 
      scheduledDate = afterRemind(remind, scheduledDate);
 
-    if (scheduledDate.isBefore(now)) {
+    scheduledDate = afterRepeat(scheduledDate, now, repeat, formatted, hour, minutes, remind);
+
+    return scheduledDate;
+  }
+
+  tz.TZDateTime afterRepeat(tz.TZDateTime scheduledDate, tz.TZDateTime now, String repeat, DateTime formatted, int hour, int minutes, int remind) {
+     if (scheduledDate.isBefore(now)) {
       if (repeat == 'Delay') {
         scheduledDate = tz.TZDateTime(tz.local, now.year, now.month,
             (formatted.day) + 1, hour, minutes);
@@ -124,7 +130,6 @@ class NotifyHelper {
       }
       scheduledDate = afterRemind(remind, scheduledDate);
     }
-
     return scheduledDate;
   }
 
