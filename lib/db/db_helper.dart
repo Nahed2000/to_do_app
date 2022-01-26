@@ -62,8 +62,10 @@ class DBHelper {
 
   static Future<int> update(int id) async {
     print('update function code ');
-    return await _db!.rawUpdate(
-        'UPDATE tasks SET isComplete = ? WHERE id = ?'
-    , [1, '$id']);
+    return await _db!.rawUpdate('''
+    UPDATE tasks 
+    SET isComplete = ? 
+    WHERE id = ?  
+    ''', [1, id]);
   }
 }
