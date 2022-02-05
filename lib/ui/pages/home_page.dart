@@ -336,6 +336,8 @@ class _HomePageState extends State<HomePage> {
             color: isClose ? Colors.transparent : Clr),
         child: Center(
           child: Text(
+
+
             label,
             style:
                 isClose ? TitleStyle : TitleStyle.copyWith(color: Colors.white),
