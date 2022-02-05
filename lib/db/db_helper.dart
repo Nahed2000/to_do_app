@@ -63,7 +63,7 @@ class DBHelper {
     print('update function code ');
     return await _db!.rawUpdate('''
     UPDATE tasks 
-    SET isComplete = ? 
+    SET isCompleted = ? 
     WHERE id = ?  
     ''', [1, id]);
   }

@@ -23,7 +23,7 @@ class NotifyHelper {
   initializeNotification() async {
     tz.initializeTimeZones();
     _configureSelectNotificationSubject();
-    await _configureLocalTimeZone();
+    await _configureLocalTimeZone().then((value) => debugPrint('Successfully')).catchError((onError){debugPrint(onError.toString());});
     // await requestIOSPermissions(flutterLocalNotificationsPlugin);
     final IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
@@ -100,7 +100,7 @@ class NotifyHelper {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     print('now = $now');
 
-    var formatted = DateFormat.yMEd().parse(date);
+    var formatted = DateFormat.yMd().parse(date);
     final tz.TZDateTime fd = tz.TZDateTime.from(formatted, tz.local);
 
 
@@ -108,7 +108,7 @@ class NotifyHelper {
         tz.TZDateTime(tz.local, fd.year, fd.month, fd.day, hour, minutes);
 
      scheduledDate = afterRemind(remind, scheduledDate);
-
+    print('fd = $fd');
     scheduledDate = afterRepeat(scheduledDate, now, repeat, formatted, hour, minutes, remind);
 
     return scheduledDate;
@@ -126,9 +126,10 @@ class NotifyHelper {
       }
       if (repeat == 'Monthly ') {
         scheduledDate = tz.TZDateTime(tz.local, now.year,
-            (formatted.month) + 1, now.day, hour, minutes);
+            (formatted.month) + 1, formatted.day, hour, minutes);
       }
       scheduledDate = afterRemind(remind, scheduledDate);
+
     }
     return scheduledDate;
   }
@@ -167,7 +168,7 @@ class NotifyHelper {
   }
 
 /*   Future selectNotification(String? payload) async {
-    if (payload != null) {
+    if (payload != null) {*
       //selectedNotificationPayload = "The best";
       selectNotificationSubject.add(payload);
       print('notification payload: $payload');

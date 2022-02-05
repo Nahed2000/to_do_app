@@ -107,15 +107,11 @@ class _HomePageState extends State<HomePage> {
                       task.date == DateFormat.yMd().format(_selestedTime)||
                       (task.repeat=='Weekly'&&_selestedTime.difference(DateFormat.yMd().parse(task.date!)).inDays%7 ==0)
                       ||(task.repeat=='Monthly'&&  DateFormat.yMd().parse(task.date!).day==_selestedTime.day)
-
-
                   ) {
-                    
                     // var hour = task.startTime.toString().split(':')[0];
                     // var minute = task.startTime.toString().split(':')[1];
                     // print('hour : $hour');
                     // print('minute :  $minute');
-                    
                     var date = DateFormat.jm().parse(task.startTime!);
                     var myTime = DateFormat('HH:mm').format(date);
                     NotifyHelper().scheduledNotification(

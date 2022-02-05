@@ -67,7 +67,7 @@ TextStyle get bodyText{
           fontWeight: FontWeight.w400,
           color: Get.isDarkMode? Colors.white:Colors.black
       )
-  );
+  ); 
 }
 TextStyle get body2Text{
   return GoogleFonts.lato(
